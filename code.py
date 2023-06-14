@@ -18,7 +18,7 @@ def pecaCima():
     return '@'
 
 def rainhaBranca():
-    return 'I'
+    return '&'
 
 def rainhaPreta():
     return 'O'
