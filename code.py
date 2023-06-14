@@ -2,40 +2,60 @@
 #Luiza Esther Martins 555516
 #Maria Luiza Felipe 552655
 
+#definindo as peças com as quais o usuário irá jogar :
+def escolherCor():
+
+    print("Bem vindo ao Jogo de Damas! Antes de começarmos, escolha com que peças você quer jogar :")
+    corUsuario = input("Insira C para jogar com as peças de cima (o) e B para jogar com as peças de baixo (@)\n")
+    if corUsuario == "C":
+        cor = pecaBaixo()
+    elif corUsuario == "B":
+        cor = pecaCima()
+    else:
+        print("Escolha uma cor válida")
+        return escolherCor()
+        
+    return cor
+
+#definindo o tamanho do tabuleiro :
 def tamanhoTabuleiro():
     return 10
 
+#definindo os espaços válidos de movimentação (casaPreta) e espaços sem movimentação (casaBranca) :
 def casaPreta():
     return ' '
 
 def casaBranca():
     return '#'
 
-def pecaBaixo():
+#definindo as peças (normais e rainhas):
+def pecaCima():
     return 'o'
 
-def pecaCima():
+def pecaBaixo():
     return '@'
 
-def rainhaBranca():
-    return '&'
-
-def rainhaPreta():
+def rainhaBaixo():
     return 'O'
 
-def corOposta(cor):
-    if cor == pecaCima():
-        return pecaBaixo()
-    else:
-        return pecaCima()
+def rainhaCima():
+    return '&'
 
+def corOposta(cor):
+    if cor == pecaBaixo():
+        return pecaCima()
+    else:
+        return pecaBaixo()
+    
+#construção do tabuleiro, com as peças e os espaços :
 def iniciarTabuleiro(n):
-    return [[((i+j)%2 and i < n/2  - 1)*pecaBaixo() + 
-          ((i+j)%2 and i > n/2)*pecaCima() + 
+    return [[((i+j)%2 and i < n/2  - 1)*pecaCima() + 
+          ((i+j)%2 and i > n/2)*pecaBaixo() + 
           (not (i+j)%2)*casaBranca() +
         ((i+j)%2 and (i == n/2  - 1 or i == n/2))*casaPreta() 
         for j in range(n)] for i in range(n)]
 
+ #atualização do tabuleiro após o movimento de uma peça :
 def renderMove(piecePosIn, piecePosAfter, tabuleiro, pieceColor):
     #print(piecePosIn, piecePosAfter)
     tabuleiro[piecePosIn[0]][ piecePosIn[1]] = casaPreta()
@@ -43,9 +63,10 @@ def renderMove(piecePosIn, piecePosAfter, tabuleiro, pieceColor):
         tabuleiro[int((piecePosIn[0] + piecePosAfter[0])/2)][int((piecePosIn[1] + piecePosAfter[1])/2)] = casaPreta()
     tabuleiro[piecePosAfter[0]][ piecePosAfter[1]] = pieceColor
 
+#Definição de movimentos possíveis :
 def possibleMoves(piecePos, pieceColor, n, tabuleiro):
 
-    step = 2*(pieceColor == pecaBaixo()) - 1
+    step = 2*(pieceColor == pecaCima()) - 1
     possible_moves = [] #x,y,haveCapture
     haveCaptureMove = False
 
@@ -128,8 +149,14 @@ def temCaptura(cor, n , tabuleiro):
 
 def turnoUsuario(cor, n, tabuleiro, capturaObrigatoria = False, pecaObrigatoria = [0,0]):
     printTabuleiro(tabuleiro)
+    #Verifica primeiramente se tem captura obrigatória 
     if(not capturaObrigatoria):
-        piecePos = [int(e) for e in input("Insira a peça que deseja mover ").split()]
+        inputUsuario = input("Insira a peça que deseja mover : ")
+        #converter ASCII
+        piecePos = [int(inputUsuario[1]),ord(inputUsuario[0])-65]
+        PosFinal = [int(inputUsuario[5]),ord(inputUsuario[4])-65]
+        print(piecePos) 
+        print(PosFinal)
     else:
         print("Você deve usar a peça na posição" + str(pecaObrigatoria))
         piecePos = pecaObrigatoria
@@ -140,6 +167,11 @@ def turnoUsuario(cor, n, tabuleiro, capturaObrigatoria = False, pecaObrigatoria 
         return
     
     possible_moves = possibleMoves(piecePos, cor, n, tabuleiro)
+    
+    #caso o movimento não seja válido, a função será parada
+    if not PosFinal in possible_moves :
+        turnoUsuario (cor,n,tabuleiro,capturaObrigatoria,pecaObrigatoria)
+        return
 
     if temCaptura(cor, n, tabuleiro):
         pecaValida = True
@@ -150,33 +182,8 @@ def turnoUsuario(cor, n, tabuleiro, capturaObrigatoria = False, pecaObrigatoria 
         if not pecaValida:
             print("Você tem uma captura obrigatória, você não pode escolher esta peça!")
             turnoUsuario(cor, n, tabuleiro)
-        
-
-    print(possible_moves)
-    if(len(possible_moves) == 4):
-        comando = input("Insira 1, 2, 3 ou 4 para escolher o movimento ou insira qualquer outra tecla para escolher outra peça\n")
-    if(len(possible_moves) == 3):
-        comando = input("Insira 1, 2 ou 3 para escolher o movimento ou insira qualquer outra tecla para escolher outra peça\n")
-    if(len(possible_moves) == 2):
-        comando = input("Insira 1 ou 2 para escolher o movimento ou insira qualquer outra tecla para escolher outra peça\n")
-    elif(len(possible_moves) == 1):
-        comando = input("Insira 1 para movimentar ou insira qualquer outra tecla para escolher outra peça\n")
-    else:
-        print("Escolha outra peça")
-        turnoUsuario(cor, n, tabuleiro)
-        return
+   
     
-    if comando == '1':
-        move = possible_moves[0]
-    elif comando == '2' and len(possible_moves) >= 2:
-        move = possible_moves[1]
-    elif comando == '3' and len(possible_moves) >= 3:
-        move = possible_moves[2]
-    elif comando == '4' and len(possible_moves) == 4:
-        move = possible_moves[3]
-    else:
-        turnoUsuario(cor, n , tabuleiro)
-        return
 
     renderMove(piecePos, move[:2], tabuleiro, cor)
 
@@ -261,8 +268,8 @@ def vitoriasPretas(n, tabuleiro):
     vitoria = True
     for i in range(n):
         for j in range(n):
-            if tabuleiro[i][j] == pecaCima():
-                if(len(possibleMoves([i,j],pecaCima(), n, tabuleiro)) > 0):
+            if tabuleiro[i][j] == pecaBaixo():
+                if(len(possibleMoves([i,j],pecaBaixo(), n, tabuleiro)) > 0):
                     vitoria = False
 
     return vitoria
@@ -271,8 +278,8 @@ def vitoriasBrancas(n, tabuleiro):
     vitoria = True
     for i in range(n):
         for j in range(n):
-            if tabuleiro[i][j] == pecaBaixo():
-                if(len(possibleMoves([i,j],pecaBaixo(), n, tabuleiro)) > 0):
+            if tabuleiro[i][j] == pecaCima():
+                if(len(possibleMoves([i,j],pecaCima(), n, tabuleiro)) > 0):
                     vitoria = False
 
     return vitoria
@@ -292,30 +299,14 @@ def alguemGanhou(n, tabuleiro):
     
 
 def gerenciadorTurnos(corUsuario, n, tabuleiro):
-    cor = pecaCima()
+    cor = pecaBaixo()
     while not alguemGanhou(n, tabuleiro):
-        if(corUsuario == cor):
-            turnoUsuario(corUsuario, n, tabuleiro)
-        else:
-            turnoAdversario(cor, n, tabuleiro)
+        turnoUsuario(corUsuario, n, tabuleiro)
+        
 
         cor = corOposta(cor)  
 
             
-def escolherCor():
-
-    print("Bem vindo ao Jogo de Damas! Antes de começarmos, escolha com que peças você quer jogar :")
-    corUsuario = input("Insira C para jogar com as peças de cima (o) e B para jogar com as peças de baixo (@)\n")
-    if corUsuario == "C":
-        cor = pecaCima()
-    elif corUsuario == "B":
-        cor = pecaBaixo()
-    else:
-        print("Escolha uma cor válida")
-        return escolherCor()
-        
-    return cor
-
 
 def Damas():
     
