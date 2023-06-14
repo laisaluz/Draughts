@@ -1,3 +1,7 @@
+#Laisa Caroline da Costa Luz 552531
+#Luiza Esther Martins 555516
+#Maria Luiza Felipe 552655
+
 def tamanhoTabuleiro():
     return 10
 
@@ -7,10 +11,10 @@ def casaPreta():
 def casaBranca():
     return '#'
 
-def pecaPreta():
+def pecaBaixo():
     return 'o'
 
-def pecaBranca():
+def pecaCima():
     return '@'
 
 def rainhaBranca():
@@ -20,14 +24,14 @@ def rainhaPreta():
     return 'O'
 
 def corOposta(cor):
-    if cor == pecaBranca():
-        return pecaPreta()
+    if cor == pecaCima():
+        return pecaBaixo()
     else:
-        return pecaBranca()
+        return pecaCima()
 
 def iniciarTabuleiro(n):
-    return [[((i+j)%2 and i < n/2  - 1)*pecaPreta() + 
-          ((i+j)%2 and i > n/2)*pecaBranca() + 
+    return [[((i+j)%2 and i < n/2  - 1)*pecaBaixo() + 
+          ((i+j)%2 and i > n/2)*pecaCima() + 
           (not (i+j)%2)*casaBranca() +
         ((i+j)%2 and (i == n/2  - 1 or i == n/2))*casaPreta() 
         for j in range(n)] for i in range(n)]
@@ -41,7 +45,7 @@ def renderMove(piecePosIn, piecePosAfter, tabuleiro, pieceColor):
 
 def possibleMoves(piecePos, pieceColor, n, tabuleiro):
 
-    step = 2*(pieceColor == pecaPreta()) - 1
+    step = 2*(pieceColor == pecaBaixo()) - 1
     possible_moves = [] #x,y,haveCapture
     haveCaptureMove = False
 
@@ -257,8 +261,8 @@ def vitoriasPretas(n, tabuleiro):
     vitoria = True
     for i in range(n):
         for j in range(n):
-            if tabuleiro[i][j] == pecaBranca():
-                if(len(possibleMoves([i,j],pecaBranca(), n, tabuleiro)) > 0):
+            if tabuleiro[i][j] == pecaCima():
+                if(len(possibleMoves([i,j],pecaCima(), n, tabuleiro)) > 0):
                     vitoria = False
 
     return vitoria
@@ -267,8 +271,8 @@ def vitoriasBrancas(n, tabuleiro):
     vitoria = True
     for i in range(n):
         for j in range(n):
-            if tabuleiro[i][j] == pecaPreta():
-                if(len(possibleMoves([i,j],pecaPreta(), n, tabuleiro)) > 0):
+            if tabuleiro[i][j] == pecaBaixo():
+                if(len(possibleMoves([i,j],pecaBaixo(), n, tabuleiro)) > 0):
                     vitoria = False
 
     return vitoria
@@ -288,7 +292,7 @@ def alguemGanhou(n, tabuleiro):
     
 
 def gerenciadorTurnos(corUsuario, n, tabuleiro):
-    cor = pecaBranca()
+    cor = pecaCima()
     while not alguemGanhou(n, tabuleiro):
         if(corUsuario == cor):
             turnoUsuario(corUsuario, n, tabuleiro)
@@ -300,12 +304,12 @@ def gerenciadorTurnos(corUsuario, n, tabuleiro):
             
 def escolherCor():
 
-    print("Bem vindo ao jogo de Damas, antes de começarmos, escolha com que cor você quer jogar!")
-    corUsuario = input("Insira B para brancas e P para as pretas\n")
-    if corUsuario == "B":
-        cor = pecaBranca()
-    elif corUsuario == "P":
-        cor = pecaPreta()
+    print("Bem vindo ao Jogo de Damas! Antes de começarmos, escolha com que peças você quer jogar :")
+    corUsuario = input("Insira C para jogar com as peças de cima (o) e B para jogar com as peças de baixo (@)\n")
+    if corUsuario == "C":
+        cor = pecaCima()
+    elif corUsuario == "B":
+        cor = pecaBaixo()
     else:
         print("Escolha uma cor válida")
         return escolherCor()
