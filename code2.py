@@ -182,9 +182,9 @@ class GerenciadorJogo:
         self.tabuleiro = self.iniciarTabuleiro()
 
     def escolherOrientacaoInicial(self):
-        orientacaoInicial = input("Insira qual lado deve começar, C para as peças de cima ou B para as peças de baixo ")
+        orientacaoInicial = input("Insira qual lado deve começar, C para as peças de cima ou B para as peças de baixo : ")
         while orientacaoInicial != "B" and orientacaoInicial != "C":
-            orientacaoInicial = input("Opção inválida, por favor escolha C para as peças de cima ou B para as peças de baixo ")
+            orientacaoInicial = input("Opção inválida, por favor escolha C para as peças de cima ou B para as peças de baixo : ")
 
         if orientacaoInicial == 'C':
             self.orientacao = 1
@@ -226,7 +226,7 @@ class GerenciadorJogo:
         print(" ")
 
     def jogarTurno(self):
-        inputUsuario = input("Insira um movimento")
+        inputUsuario = input("Insira um movimento: ")
 
         try:
 
@@ -249,9 +249,7 @@ class GerenciadorJogo:
 
         print(peca.movimentosPossiveis)
 
-        if(peca.movimentar_peca(posFinal, self.tabuleiro)):
-            self.jogarTurno()
-            return
+        return peca.movimentar_peca(posFinal, self.tabuleiro) #retorna se deve jogar novamente ou não
 
 
     def iniciarJogo(self):
@@ -283,8 +281,8 @@ class GerenciadorJogo:
                 return
         
             print("Turno das peças de " + (self.orientacao==1)*"Cima" + (self.orientacao==-1)*"Baixo")
-            self.jogarTurno()
-            self.orientacao = -self.orientacao
+            if(not self.jogarTurno()):
+                self.orientacao = -self.orientacao
 
         
     def gameLoop(self):
