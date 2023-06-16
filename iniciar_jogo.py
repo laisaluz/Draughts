@@ -1,17 +1,19 @@
-#Variaveis Globais
+#Definindo as variáveis globais para as capturas disponíveis :
 possuiCapturasDisponiveis = {
                             -1: False, #-1 para pecas de cima
                             0: False, #0 para casas vazias
                             1: False, # 1 para pecas de baixo
                             } 
 
+
+#Definindo as variáveis globais para a pontuação dos jogadores :
 pontuacaoJogadores = {
     -1: 0,
     1: 0,
 }
 
 
-#Funcoes auxiliares
+#Funções auxiliares
 def sinal(x):
     if x > 0:
         return 1
@@ -20,9 +22,10 @@ def sinal(x):
     else:
         return 0
 
-#Classes
+#Definimos as classes atribuídas às peças 
 class Peca:
 
+ 
     ehDama = False
     possuiCaptura = False
     movimentosPossiveis = []
