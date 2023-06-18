@@ -250,7 +250,7 @@ class GerenciadorJogo:
         peca.movimentos_possiveis(self.tabuleiro) #Reconferir os movimentos possiveis da peca, pois é possivel que seja adicionados movimentos invalidos em IniciarTurno(self, tabuleiro) 
         #pois nem todas as pecas podem ter sido verificadas antes de se adicionar os movimentos
 
-        print(peca.movimentosPossiveis)
+        #print(peca.movimentosPossiveis)
 
         return peca.movimentar_peca(posFinal, self.tabuleiro) #retorna se deve jogar novamente ou não
 
