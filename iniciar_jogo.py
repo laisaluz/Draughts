@@ -41,7 +41,8 @@ class Peca:
         if self.orientacao == 0:
             return
         
-      #Definindo os movimentos possíveis quando a peça é uma dama :
+    # Definindo quando um movimento é permitido no caso em que a peça é uma dama :
+
         if not self.ehDama:
       
             direcoes = [[1,1], [1,-1], [-1,1], [-1,-1]]
@@ -67,7 +68,8 @@ class Peca:
                             
                             self.movimentosPossiveis += [[i,j]]
 
-      # Definindo os movimentos possíveis quando a peça não é uma dama : 
+    # Definindo quando um movimento é permitido no caso em que a peça não é uma dama : 
+
         else:
             
             direcoes = [[1,1], [1,-1], [-1,1], [-1,-1]]
@@ -113,6 +115,7 @@ class Peca:
                             j += direcao[1]
 
 
+    # Definindo a movimentação da peça :
 
     def movimentar_peca(self, movimento, tabuleiro): 
         '''Faz alterações no tabuleiro e retorna se o jogador deve jogar novamente ou não'''
@@ -120,7 +123,9 @@ class Peca:
             
             y_range = range( self.y, movimento[0], sinal(movimento[0] - self.y))
             x_range = range( self.x, movimento[1], sinal(movimento[1] - self.x))
+
             #Como o movimento é diagonal, então len(y_range) = len(x_range)
+            
             capturouPeca = False
             for k in range(len(y_range)):
                 i = y_range[k]
