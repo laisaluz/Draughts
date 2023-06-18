@@ -1,4 +1,4 @@
-#Definindo as variáveis globais para as capturas disponíveis :
+# Definindo as variáveis globais para as capturas disponíveis :
 possuiCapturasDisponiveis = {
                             -1: False, #-1 para pecas de cima
                             0: False, #0 para casas vazias
@@ -6,14 +6,14 @@ possuiCapturasDisponiveis = {
                             } 
 
 
-#Definindo as variáveis globais para a pontuação dos jogadores :
+# Definindo as variáveis globais para a pontuação dos jogadores :
 pontuacaoJogadores = {
     -1: 0,
     1: 0,
 }
 
 
-#Funções auxiliares
+# Funções auxiliares
 def sinal(x):
     if x > 0:
         return 1
@@ -22,10 +22,10 @@ def sinal(x):
     else:
         return 0
 
-#Definimos as classes atribuídas às peças 
+# Definimos as classes atribuídas às peças :
 class Peca:
 
- 
+ # Definindo as condições ehDama, possuiCaptura e movimentos possíveis 
     ehDama = False
     possuiCaptura = False
     movimentosPossiveis = []
@@ -34,17 +34,16 @@ class Peca:
     def __init__(self, y, x, orientacao):
         self.x = x
         self.y = y
-        self.orientacao = orientacao # -1 para pecas de baixo, 1 para pecas de cima e 0 para casas vazias
+        self.orientacao = orientacao # -1 para pecas de baixo, 1 para pecas de cima e 0 para casas vazias : será utilizado ao definir os caracteres para cada peça 
 
     def movimentos_possiveis(self, tabuleiro):
         self.movimentosPossiveis = []
         if self.orientacao == 0:
             return
         
+      #Definindo os movimentos possíveis quando a peça é uma dama :
         if not self.ehDama:
-            #Tem peça inimiga na casa
-            #Se não tiver peça inimiga, verificar se não há peca ou limites obstruindo
-            #Só assim, podemos fazer o movimento
+      
             direcoes = [[1,1], [1,-1], [-1,1], [-1,-1]]
             for direcao in direcoes:
                 i = self.y + direcao[0]
@@ -68,11 +67,9 @@ class Peca:
                             
                             self.movimentosPossiveis += [[i,j]]
 
-
+      # Definindo os movimentos possíveis quando a peça não é uma dama : 
         else:
-            #Tem peça inimiga na casa
-            #Se não tiver peça inimiga, verificar se não há peca ou limites obstruindo
-            #Só assim, podemos fazer o movimento
+            
             direcoes = [[1,1], [1,-1], [-1,1], [-1,-1]]
             for direcao in direcoes:
                 bloqueado = False
@@ -155,7 +152,8 @@ class Peca:
             self.ehDama = True
 
         return
-    
+
+# Mudando o caractere nos casos peça normal (o,@) e peça dama (O,&) :   
     def __str__(self):
         if(self.orientacao == 1):
             if(self.ehDama):
@@ -168,6 +166,7 @@ class Peca:
                 return '&'
             else:
                 return '@'
+# Definindo os espaços do tabuleiro - casa disponível de movimentação (' ') e não disponível ('#') :
         else:
             if((self.x + self.y)%2):
                 return ' '
