@@ -143,7 +143,7 @@ class Peca:
             return True #Movimento inválido
 
                 
-
+# Definindo em quais casas as peças se tornam dama :
     def virar_dama(self):
         if(self.orientacao == -1 and self.y == 0):
             self.ehDama = True
