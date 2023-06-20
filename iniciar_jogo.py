@@ -188,6 +188,8 @@ class GerenciadorJogo:
         self.escolherOrientacaoInicial()
         self.tabuleiro = self.iniciarTabuleiro()
 
+# Escolhendo se o usuário irá começar com as peças de cima ou com as peças de baixo :
+
     def escolherOrientacaoInicial(self):
         orientacaoInicial = input("Insira qual lado deve começar, C para as peças de cima ou B para as peças de baixo : ")
         while orientacaoInicial != "B" and orientacaoInicial != "C":
@@ -198,6 +200,7 @@ class GerenciadorJogo:
         else:
             self.orientacao = -1
 
+# Iniciando o tabuleiro :
     def iniciarTabuleiro(self):
         tabuleiro = [[Peca(y,x,0) for x in range(10)] for y in range(10)]
         for i in range(10):
@@ -209,6 +212,7 @@ class GerenciadorJogo:
 
         return tabuleiro
 
+# Construindo o tabuleiro conforme o formato especificado :
 
     def escreverTabuleiro(self):
         letras = 'ABCDEFGHIJ'
@@ -232,6 +236,7 @@ class GerenciadorJogo:
         
         print(" ")
 
+# Recebendo um movimento do usuário e mudando a posição da peça escolhida :
     def jogarTurno(self):
         inputUsuario = input("Insira um movimento: ")
 
@@ -241,6 +246,7 @@ class GerenciadorJogo:
             posFinal = [int(inputUsuario[5]),ord(inputUsuario[4])-65]
             peca: Peca = self.tabuleiro[posInicial[0]] [posInicial[1]]
 
+        #Casos em que não há movimento da peça :
         except Exception:
             print("Movimento inválido, peça fora do tabuleiro, escolha outro movimento")
             self.jogarTurno()
@@ -279,6 +285,7 @@ class GerenciadorJogo:
                     if peca.orientacao == 1:
                         somaMovimentosBaixo += len(peca.movimentosPossiveis) > 0
 
+            #Condição de vitória das peças de baixo e das peças de cima :
             if somaMovimentosBaixo == 0:
                 print("Peças de Cima ganharam!")
                 return
@@ -291,7 +298,7 @@ class GerenciadorJogo:
             if(not self.jogarTurno()):
                 self.orientacao = -self.orientacao
 
-        
+#Perguntar ao usuário se ele quer ou não recomeçar o jogo :
     def gameLoop(self):
         self.iniciarJogo()
         recomecar = input("Deseja recomeçar?")
