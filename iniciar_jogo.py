@@ -45,6 +45,7 @@ class Peca:
         Ela recebe o tabuleiro como parâmetro e atualiza o atributo movimentosPossiveis da peça com uma lista contendo as coordenadas dos movimentos válidos'''
         
         self.movimentosPossiveis = []
+        self.possuiCaptura = False
         if self.orientacao == 0:
             return
         
@@ -52,22 +53,27 @@ class Peca:
         #Percorre múltiplas posições na mesma direção até encontrar uma peça oponente, sem que tenha uma peça do mesmo tipo bloqueando o caminho 
 
         if not self.ehDama:
+            
+            
       
             direcoes = [[1,1], [1,-1], [-1,1], [-1,-1]]
             for direcao in direcoes:
+                
                 i = self.y + direcao[0]
                 j = self.x + direcao[1]
                 if 0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro):
                     podeCapturar = tabuleiro[i][j].orientacao == -self.orientacao
                     i += direcao[0]
                     j += direcao[1]
+                
                     if podeCapturar and 0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro) and tabuleiro[i][j].orientacao == 0:
-
+                        
                         self.movimentosPossiveis += [[i,j]]
                         self.possuiCaptura = True
                         possuiCapturasDisponiveis[self.orientacao] = True
 
             if(not self.possuiCaptura and not possuiCapturasDisponiveis[self.orientacao]):
+                
                 for direcao in direcoes:
                     if direcao[0] == self.orientacao:
                         i = self.y + direcao[0]
@@ -75,6 +81,12 @@ class Peca:
                         if 0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro) and tabuleiro[i][j].orientacao == 0:
                             
                             self.movimentosPossiveis += [[i,j]]
+
+
+
+            #print(self.movimentosPossiveis) - TESTE
+                
+                
 
         #No caso em que a peça não é uma dama : 
         #Percorre os movimentos nas diagonais (cima-direita, cima-esquerda, baixo-direita, baixo-esquerda).
@@ -144,7 +156,7 @@ class Peca:
             for k in range(len(y_range)):
                 i = y_range[k]
                 j = x_range[k]
-                if(tabuleiro[i][ j].orientacao == -self.orientacao):
+                if(tabuleiro[i][j].orientacao == -self.orientacao):
                     pontuacaoJogadores[self.orientacao] += 1
                     print("O novo placar é : Peças de Cima",pontuacaoJogadores[1],"vs Peças de baixo",pontuacaoJogadores[-1])
                     capturouPeca = True
@@ -225,6 +237,7 @@ class GerenciadorJogo:
 # Iniciando o tabuleiro :
 
     def iniciarTabuleiro(self):
+        '''Tabuleiro oficial das damas
         tabuleiro = [[Peca(y,x,0) for x in range(10)] for y in range(10)]
         for i in range(10):
             for j in range(10):
@@ -232,11 +245,19 @@ class GerenciadorJogo:
                     tabuleiro[i][j] = Peca(i,j,1)
                 elif ((i+j)%2 and i > 6):
                     tabuleiro[i][j] = Peca(i,j,-1)
-
+        '''
+        '''Tabuleiro de testes'''
+        tabuleiro = [[Peca(y,x,0) for x in range(10)] for y in range(10)]
+        tabuleiro[6][3] = Peca(6,3, -1)
+        tabuleiro[5][2] = Peca(5,2, 1)
+        #tabuleiro[3][2] = Peca(3,2,1)
+        tabuleiro[6][6] = Peca(6,5,1) 
         return tabuleiro
 
 # Construindo o tabuleiro conforme o formato especificado :
-
+    def estaDentroDoTabuleiro(self, pos):
+        return 0 <= pos[0] and pos[0] < len(self.tabuleiro) and 0 <= pos[1] and pos[1] < len(self.tabuleiro)
+    
     def escreverTabuleiro(self):
         letras = 'ABCDEFGHIJ'
         linhaEntreCasas = '  +-+-+-+-+-+-+-+-+-+-+'
@@ -264,22 +285,22 @@ class GerenciadorJogo:
     def jogarTurno(self):
         inputUsuario = input("Insira um movimento: ")
 
-        try:
+        posInicial = [int(inputUsuario[1]),ord(inputUsuario[0])-65]
+        posFinal = [int(inputUsuario[5]),ord(inputUsuario[4])-65]
 
-            posInicial = [int(inputUsuario[1]),ord(inputUsuario[0])-65]
-            posFinal = [int(inputUsuario[5]),ord(inputUsuario[4])-65]
-            peca: Peca = self.tabuleiro[posInicial[0]] [posInicial[1]]
-
-        #Casos em que não há movimento da peça :
-        except Exception:
-            print("Jogada inválida, peça fora do tabuleiro, escolha outro movimento")
-            self.jogarTurno()
-            return
+        if not self.estaDentroDoTabuleiro(posInicial):
+            print("Posição da peça fora do tabuleiro")
+            return True
+        
+        if not self.estaDentroDoTabuleiro(posFinal):
+            print("Movimento indo para fora do tabuleiro")
+            return True
+        
+        peca: Peca = self.tabuleiro[posInicial[0]] [posInicial[1]]
 
         if peca.orientacao != self.orientacao:
             print("Peça invalida, escolha outro movimento")
-            self.jogarTurno()
-            return
+            return True
         
         peca.movimentos_possiveis(self.tabuleiro) 
         
@@ -296,6 +317,7 @@ class GerenciadorJogo:
         verifica as condições de vitória e permite que os jogadores façam seus movimentos.'''
         
         while True:
+
             self.escreverTabuleiro()
             possuiCapturasDisponiveis[-1] = False
             possuiCapturasDisponiveis[1] = False
