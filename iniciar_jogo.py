@@ -132,6 +132,7 @@ class Peca:
                 j = x_range[k]
                 if(tabuleiro[i][ j].orientacao == -self.orientacao):
                     pontuacaoJogadores[self.orientacao] += 1
+                    print("O novo placar é : C",pontuacaoJogadores[1],"vs B",pontuacaoJogadores[-1])
                     capturouPeca = True
                     
                 tabuleiro[i][ j] = Peca(i, j, 0)
@@ -139,6 +140,7 @@ class Peca:
             tabuleiro[movimento[0]][movimento[1]] = self
             self.y = movimento[0]
             self.x = movimento[1]
+            
             self.virar_dama()
 
             return capturouPeca #Se capturou uma peca, deve jogar novamente
