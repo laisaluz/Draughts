@@ -57,7 +57,6 @@ class Peca:
 
                         self.movimentosPossiveis += [[i,j]]
                         self.possuiCaptura = True
-                        print('Captura Obrigatória!')
                         possuiCapturasDisponiveis[self.orientacao] = True
 
             if(not self.possuiCaptura and not possuiCapturasDisponiveis[self.orientacao]):
@@ -319,4 +318,3 @@ def Damas():
 Damas()
 
         
-
