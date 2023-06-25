@@ -1,4 +1,4 @@
-# Definindo as variáveis globais para as capturas disponíveis :
+# Inicialmente, definimos que não existem capturas disponíveis para nenhum tipo de peça :
 possuiCapturasDisponiveis = {
                             -1: False, #-1 para pecas de cima
                             0: False, #0 para casas vazias
@@ -6,15 +6,17 @@ possuiCapturasDisponiveis = {
                             } 
 
 
-# Definindo as variáveis globais para a pontuação dos jogadores :
+# Além disso, definimos a pontuação inicial (0) de cada jogador :
 pontuacaoJogadores = {
     -1: 0,
     1: 0,
 }
 
 
-# Funções auxiliares
 def sinal(x):
+    
+    '''De acordo com a orientação, definimos que as peças de cima tem sinal -1, as casas vazias 0 e as peças de baixo 1'''
+    
     if x > 0:
         return 1
     elif x < 0:
@@ -25,23 +27,29 @@ def sinal(x):
 # Definimos as classes atribuídas às peças :
 class Peca:
 
- # Definindo as condições ehDama, possuiCaptura e movimentos possíveis 
     ehDama = False
     possuiCaptura = False
     movimentosPossiveis = []
 
-
     def __init__(self, y, x, orientacao):
+        
+        '''Função responsável por definir e atribuir os valores iniciais dos atributos do objeto "Peca" '''
+        
         self.x = x
         self.y = y
-        self.orientacao = orientacao # -1 para pecas de baixo, 1 para pecas de cima e 0 para casas vazias : será utilizado ao definir os caracteres para cada peça 
+        self.orientacao = orientacao # -1 para pecas de baixo, 1 para pecas de cima e 0 para casas vazias  
 
     def movimentos_possiveis(self, tabuleiro):
+        
+        '''Função responsável por calcular os movimentos possíveis para uma determinada peça em um tabuleiro de damas. 
+        Ela recebe o tabuleiro como parâmetro e atualiza o atributo movimentosPossiveis da peça com uma lista contendo as coordenadas dos movimentos válidos'''
+        
         self.movimentosPossiveis = []
         if self.orientacao == 0:
             return
         
-    # Definindo quando um movimento é permitido no caso em que a peça é uma dama :
+        #No caso em que a peça é uma dama : 
+        #Percorre múltiplas posições na mesma direção até encontrar uma peça oponente, sem que tenha uma peça do mesmo tipo bloqueando o caminho 
 
         if not self.ehDama:
       
@@ -68,7 +76,11 @@ class Peca:
                             
                             self.movimentosPossiveis += [[i,j]]
 
-    # Definindo quando um movimento é permitido no caso em que a peça não é uma dama : 
+        #No caso em que a peça não é uma dama : 
+        #Percorre os movimentos nas diagonais (cima-direita, cima-esquerda, baixo-direita, baixo-esquerda).
+        #Verifica se é possível capturar uma peça do oponente .
+        #Se for possível e a próxima posição após a peça estiver vazia, esse movimento é adicionado à lista de movimentosPossiveis.
+        #Caso não haja nenhuma captura possível, a função verifica os movimentos diagonais .
 
         else:
             
@@ -98,7 +110,9 @@ class Peca:
                             if tabuleiro[i][j].orientacao != 0 and softBlock:
                                 bloqueado = True
 
-                            
+                        #No final da função, o atributo possuiCaptura da peça é atualizado para indicar se a peça atual possui alguma captura possível. 
+                        #Além disso, a função atualiza o dicionário possuiCapturasDisponiveis para refletir se há capturas disponíveis para o jogador atual.
+
                         self.possuiCaptura = True
                         possuiCapturasDisponiveis[self.orientacao] = True
                     
@@ -115,10 +129,10 @@ class Peca:
                             j += direcao[1]
 
 
-    # Definindo a movimentação da peça :
-
     def movimentar_peca(self, movimento, tabuleiro): 
-        '''Faz alterações no tabuleiro e retorna se o jogador deve jogar novamente ou não'''
+
+        '''Executa o movimento válido de uma peça no tabuleiro, atualiza o estado do dele e verifica se houve captura de peças durante o movimento.'''
+        
         if movimento in self.movimentosPossiveis:
             
             y_range = range( self.y, movimento[0], sinal(movimento[0] - self.y))
@@ -132,7 +146,7 @@ class Peca:
                 j = x_range[k]
                 if(tabuleiro[i][ j].orientacao == -self.orientacao):
                     pontuacaoJogadores[self.orientacao] += 1
-                    print("O novo placar é : C",pontuacaoJogadores[1],"vs B",pontuacaoJogadores[-1])
+                    print("O novo placar é : Peças de Cima",pontuacaoJogadores[1],"vs Peças de baixo",pontuacaoJogadores[-1])
                     capturouPeca = True
                     
                 tabuleiro[i][ j] = Peca(i, j, 0)
@@ -149,9 +163,10 @@ class Peca:
             print("Jogada inválida!")
             return True #Movimento inválido
 
-                
-# Definindo em quais casas as peças se tornam dama :
     def virar_dama(self):
+
+        '''Verifica se uma peça alcançou a última linha do tabuleiro adversário e, se sim, transforma essa peça em uma dama, atualizando seu tipo. '''
+
         if(self.orientacao == -1 and self.y == 0):
             self.ehDama = True
 
@@ -160,8 +175,10 @@ class Peca:
 
         return
 
-# Mudando o caractere nos casos peça normal (o,@) e peça dama (O,&) :   
     def __str__(self):
+
+        '''Ao definir o método __str__ na classe Peca, podemos controlar como um objeto dessa classe (o/@,#, ) é representado como uma string.'''
+
         if(self.orientacao == 1):
             if(self.ehDama):
                 return 'O'
@@ -173,7 +190,7 @@ class Peca:
                 return '&'
             else:
                 return '@'
-# Definindo os espaços do tabuleiro - casa disponível de movimentação (' ') e não disponível ('#') :
+
         else:
             if((self.x + self.y)%2):
                 return ' '
@@ -182,6 +199,9 @@ class Peca:
             
 
 class GerenciadorJogo:
+
+    '''A classe GerenciadorJogo é responsável por gerenciar todo o fluxo do jogo de damas, 
+    desde a inicialização até o controle dos turnos e das condições de vitória.'''
 
     orientacao = 0
 
@@ -203,6 +223,7 @@ class GerenciadorJogo:
             self.orientacao = -1
 
 # Iniciando o tabuleiro :
+
     def iniciarTabuleiro(self):
         tabuleiro = [[Peca(y,x,0) for x in range(10)] for y in range(10)]
         for i in range(10):
@@ -239,6 +260,7 @@ class GerenciadorJogo:
         print(" ")
 
 # Recebendo um movimento do usuário e mudando a posição da peça escolhida :
+
     def jogarTurno(self):
         inputUsuario = input("Insira um movimento: ")
 
@@ -259,15 +281,20 @@ class GerenciadorJogo:
             self.jogarTurno()
             return
         
-        peca.movimentos_possiveis(self.tabuleiro) #Reconferir os movimentos possiveis da peca, pois é possivel que seja adicionados movimentos invalidos em IniciarTurno(self, tabuleiro) 
+        peca.movimentos_possiveis(self.tabuleiro) 
+        
+        #Reconferir os movimentos possiveis da peca, pois é possivel que seja adicionados movimentos invalidos em IniciarTurno(self, tabuleiro) 
         #pois nem todas as pecas podem ter sido verificadas antes de se adicionar os movimentos
-
-        #print(peca.movimentosPossiveis)
 
         return peca.movimentar_peca(posFinal, self.tabuleiro) #retorna se deve jogar novamente ou não
 
 
     def iniciarJogo(self):
+
+        '''Função responsável por executar o loop principal do jogo de damas. 
+        Ela exibe o tabuleiro, verifica os movimentos possíveis para cada peça, determina se houve capturas disponíveis,
+        verifica as condições de vitória e permite que os jogadores façam seus movimentos.'''
+        
         while True:
             self.escreverTabuleiro()
             possuiCapturasDisponiveis[-1] = False
@@ -288,6 +315,7 @@ class GerenciadorJogo:
                         somaMovimentosBaixo += len(peca.movimentosPossiveis) > 0
 
             #Condição de vitória das peças de baixo e das peças de cima :
+
             if somaMovimentosBaixo == 0:
                 print("Peças de Cima ganharam!")
                 return
@@ -300,8 +328,13 @@ class GerenciadorJogo:
             if(not self.jogarTurno()):
                 self.orientacao = -self.orientacao
 
-#Perguntar ao usuário se ele quer ou não recomeçar o jogo :
+
     def gameLoop(self):
+
+        '''Função responsável por executar o loop principal do jogo em si, coordenando a interação entre os jogadores 
+        e atualizando o estado do jogo até que ocorra uma condição de término. Essa função é chamada dentro do método iniciarJogo(self) 
+        e é onde o jogo realmente acontece.'''
+
         self.iniciarJogo()
         recomecar = input("Deseja recomeçar?")
         if(recomecar == "S"):
@@ -314,6 +347,11 @@ class GerenciadorJogo:
 
 
 def Damas():
+
+    '''A função Damas() é responsável por iniciar o jogo de damas e gerenciar o fluxo do jogo. 
+    Ela cria uma instância do objeto GerenciadorJogo, que é a classe responsável por controlar todo o jogo, 
+    desde a inicialização até as condições de vitória.'''
+
     gerenciador = GerenciadorJogo()
     gerenciador.gameLoop()
 
