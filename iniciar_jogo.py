@@ -57,6 +57,7 @@ class Peca:
 
                         self.movimentosPossiveis += [[i,j]]
                         self.possuiCaptura = True
+                        print('Captura Obrigatória!')
                         possuiCapturasDisponiveis[self.orientacao] = True
 
             if(not self.possuiCaptura and not possuiCapturasDisponiveis[self.orientacao]):
@@ -144,7 +145,7 @@ class Peca:
             return capturouPeca #Se capturou uma peca, deve jogar novamente
         
         else:
-            print("Movimento inválido")
+            print("Jogada inválida!")
             return True #Movimento inválido
 
                 
@@ -248,7 +249,7 @@ class GerenciadorJogo:
 
         #Casos em que não há movimento da peça :
         except Exception:
-            print("Movimento inválido, peça fora do tabuleiro, escolha outro movimento")
+            print("Jogada inválida, peça fora do tabuleiro, escolha outro movimento")
             self.jogarTurno()
             return
 
@@ -316,8 +317,6 @@ def Damas():
     gerenciador.gameLoop()
 
 Damas()
-
-
 
         
 
