@@ -237,7 +237,7 @@ class GerenciadorJogo:
 # Iniciando o tabuleiro :
 
     def iniciarTabuleiro(self):
-        '''Tabuleiro oficial das damas
+        #Tabuleiro oficial das damas
         tabuleiro = [[Peca(y,x,0) for x in range(10)] for y in range(10)]
         for i in range(10):
             for j in range(10):
@@ -245,13 +245,13 @@ class GerenciadorJogo:
                     tabuleiro[i][j] = Peca(i,j,1)
                 elif ((i+j)%2 and i > 6):
                     tabuleiro[i][j] = Peca(i,j,-1)
-        '''
-        '''Tabuleiro de testes'''
+        
+        '''Tabuleiro de testes
         tabuleiro = [[Peca(y,x,0) for x in range(10)] for y in range(10)]
         tabuleiro[6][3] = Peca(6,3, -1)
         tabuleiro[5][2] = Peca(5,2, 1)
         #tabuleiro[3][2] = Peca(3,2,1)
-        tabuleiro[6][6] = Peca(6,5,1) 
+        tabuleiro[6][6] = Peca(6,5,1)'''
         return tabuleiro
 
 # Construindo o tabuleiro conforme o formato especificado :
