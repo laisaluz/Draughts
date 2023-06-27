@@ -55,8 +55,6 @@ class Peca:
 
         if not self.ehDama:
             
-            
-      
             direcoes = [[1,1], [1,-1], [-1,1], [-1,-1]]
             for direcao in direcoes:
                 
