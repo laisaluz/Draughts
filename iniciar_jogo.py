@@ -42,7 +42,8 @@ class Peca:
     def movimentos_possiveis(self, tabuleiro):
         
         '''Função responsável por calcular os movimentos possíveis para uma determinada peça em um tabuleiro de damas. 
-        Ela recebe o tabuleiro como parâmetro e atualiza o atributo movimentosPossiveis da peça com uma lista contendo as coordenadas dos movimentos válidos'''
+        Ela recebe o tabuleiro como parâmetro e atualiza o atributo movimentosPossiveis da peça com uma lista contendo 
+        as coordenadas dos movimentos válidos'''
         
         self.movimentosPossiveis = []
         self.possuiCaptura = False
