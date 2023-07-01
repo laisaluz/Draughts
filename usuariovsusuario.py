@@ -367,15 +367,15 @@ class GerenciadorJogo:
             print("Até a próxima")
 
 
-def Damas():
+#def Damas():
 
     '''A função Damas() é responsável por iniciar o jogo de damas e gerenciar o fluxo do jogo. 
     Ela cria uma instância do objeto GerenciadorJogo, que é a classe responsável por controlar todo o jogo, 
     desde a inicialização até as condições de vitória.'''
 
-    gerenciador = GerenciadorJogo()
-    gerenciador.gameLoop()
+    #gerenciador = GerenciadorJogo()
+    #gerenciador.gameLoop()
 
-Damas()
+#Damas()
 
         
