@@ -157,7 +157,7 @@ class Peca:
                 j = x_range[k]
                 if(tabuleiro[i][j].orientacao == -self.orientacao):
                     pontuacaoJogadores[self.orientacao] += 1
-                    print("O novo placar é : Peças de Cima",pontuacaoJogadores[1],"vs Peças de baixo",pontuacaoJogadores[-1])
+                    print("O novo placar é : Peças de Cima",pontuacaoJogadores[1],"vs Peças de Baixo",pontuacaoJogadores[-1])
                     capturouPeca = True
                     
                 tabuleiro[i][ j] = Peca(i, j, 0)
