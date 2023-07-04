@@ -25,9 +25,6 @@ def sinal(x):
         return 0
     
 
-    
-
-
 
 class Peca:
 
@@ -365,5 +362,4 @@ class GerenciadorJogo:
         e é onde o jogo realmente acontece.'''
 
         self.iniciarJogo()
-
 
