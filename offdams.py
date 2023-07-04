@@ -95,6 +95,7 @@ class Peca:
         else:
             
             direcoes = [[1,1], [1,-1], [-1,1], [-1,-1]]
+            #Corrigir lógica de captura das damas (list out of indez)
             for direcao in direcoes:
                 bloqueado = False
                 i = self.y + direcao[0]
@@ -138,7 +139,7 @@ class Peca:
                             i += direcao[0]
                             j += direcao[1]
 
-    def movimentar_peca(self, movimento, tabuleiro): 
+    def movimentar_peca(self, movimento, tabuleiro, indice): 
 
         '''Executa o movimento válido de uma peça no tabuleiro, atualiza o estado do dele e verifica se houve captura de peças durante o movimento.'''
         
@@ -155,7 +156,6 @@ class Peca:
                 j = x_range[k]
                 if(tabuleiro[i][j].orientacao == -self.orientacao):
                     pontuacaoJogadores[self.orientacao] += 1
-                    print("O novo placar é : Peças de Cima",pontuacaoJogadores[1],"vs Peças de Baixo",pontuacaoJogadores[-1])
                     capturouPeca = True
                     
                 tabuleiro[i][ j] = Peca(i, j, 0)
@@ -169,7 +169,7 @@ class Peca:
             return capturouPeca #Se capturou uma peca, deve jogar novamente
         
         else:
-            print("Jogada inválida!")
+            print("Jogada invalida na linha" + str(indice))
             return True #Movimento inválido
 
     def virar_dama(self):
@@ -215,24 +215,29 @@ class GerenciadorJogo:
 
     def __init__(self) -> None:
 
+        self.jogadas = self.lerJogadas()
+        self.indice = 1
         self.escolherOrientacaoInicial()
         self.tabuleiro = self.iniciarTabuleiro()
-        def ler_jogadas():
+        
 
-    nome_arquivo = sys.argv[1]
+    
+    
+    def lerJogadas(self):
 
-    with open(nome_arquivo, 'r') as arquivo:
-        jogadas = arquivo.readlines()
+        nome_arquivo = sys.argv[1]
 
-    return jogadas
+        with open(nome_arquivo, 'r') as arquivo:
+            jogadas = arquivo.readlines()
 
-
+        print(jogadas)
+        return jogadas
 
 
 # Escolhendo se o usuário irá começar com as peças de cima ou com as peças de baixo :
 
     def escolherOrientacaoInicial(self):  #Lê a primeira linha para indicar quem começa o jogo 
-        orientacaoInicial = 
+        orientacaoInicial = self.jogadas[0]
 
         if orientacaoInicial == 'C':
             self.orientacao = 1
@@ -282,40 +287,41 @@ class GerenciadorJogo:
 # Recebendo um movimento do usuário e mudando a posição da peça escolhida :
 
     def jogarTurno(self):
-        inputUsuario = input("Insira um movimento: ")
+        inputUsuario = self.jogadas[self.indice]
+        self.indice += 1
+        
 
         posInicial = [int(inputUsuario[1]),ord(inputUsuario[0])-65]
         posFinal = [int(inputUsuario[5]),ord(inputUsuario[4])-65]
 
-        if not self.estaDentroDoTabuleiro(posInicial):
-            print("Posição da peça fora do tabuleiro")
-            return True
-        
-        if not self.estaDentroDoTabuleiro(posFinal):
-            print("Movimento indo para fora do tabuleiro")
+        if not self.estaDentroDoTabuleiro(posInicial) or not self.estaDentroDoTabuleiro(posFinal):
+            print("Jogada invalida na linha " + str(self.indice-1))
             return True
         
         peca: Peca = self.tabuleiro[posInicial[0]] [posInicial[1]]
 
         if peca.orientacao != self.orientacao:
-            print("Peça invalida, escolha outro movimento")
+            print("Jogada invalida na linha " + str(self.indice-1))
             return True
         
         peca.movimentos_possiveis(self.tabuleiro) 
+
+
+        
         
         #Reconferir os movimentos possiveis da peca, pois é possivel que seja adicionados movimentos invalidos em IniciarTurno(self, tabuleiro) 
         #pois nem todas as pecas podem ter sido verificadas antes de se adicionar os movimentos
 
-        return peca.movimentar_peca(posFinal, self.tabuleiro) #retorna se deve jogar novamente ou não
+        return peca.movimentar_peca(posFinal, self.tabuleiro, self.indice-1) #retorna se deve jogar novamente ou não
 
 
     def iniciarJogo(self):
-
+        
         '''Função responsável por executar o loop principal do jogo de damas. 
         Ela exibe o tabuleiro, verifica os movimentos possíveis para cada peça, determina se houve capturas disponíveis,
         verifica as condições de vitória e permite que os jogadores façam seus movimentos.'''
         
-        while True:
+        while len(self.jogadas) > self.indice:
 
             possuiCapturasDisponiveis[-1] = False
             possuiCapturasDisponiveis[1] = False
@@ -348,6 +354,7 @@ class GerenciadorJogo:
                 self.orientacao = -self.orientacao
 
         self.escreverTabuleiro()  # Mostra a situação final do tabuleiro
+        print("O Placar é : Peças de Cima", pontuacaoJogadores[1],"vs Peças de Baixo", pontuacaoJogadores[-1])
 
     
 
@@ -358,13 +365,5 @@ class GerenciadorJogo:
         e é onde o jogo realmente acontece.'''
 
         self.iniciarJogo()
-        recomecar = input("Deseja recomeçar?")
-        if(recomecar == "S"):
-            self.escolherOrientacaoInicial()
-            self.tabuleiro = self.iniciarTabuleiro()
-            self.iniciarJogo()
-            return
-        else:
-            print("Até a próxima")
 
 
