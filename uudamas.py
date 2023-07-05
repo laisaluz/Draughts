@@ -102,14 +102,13 @@ class Peca:
                 j = self.x + direcao[1]
                 while(0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro) and not bloqueado):
                     podeCapturar = tabuleiro[i][j].orientacao == -self.orientacao
-                    i += direcao[0]
-                    j += direcao[1]
+                    
 
-                    if podeCapturar and 0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro) and tabuleiro[i][j].orientacao == 0:
-                        while(0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro) and not bloqueado):
+                    if podeCapturar and tabuleiro[i][j].orientacao == 0:
+                        while(0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro)):
                             softBlock = False
                             if tabuleiro[i][j].orientacao == -self.orientacao:
-                                self.movimentosPossiveis += [[i,j]]
+                                self.movimentosPossiveis.append([i,j])
                             elif tabuleiro[i][j].orientacao == self.orientacao:
                                 break
                             else:
@@ -237,20 +236,20 @@ class GerenciadorJogo:
 
     def iniciarTabuleiro(self):
         #Tabuleiro oficial das damas
-        tabuleiro = [[Peca(y,x,0) for x in range(10)] for y in range(10)]
+        '''tabuleiro = [[Peca(y,x,0) for x in range(10)] for y in range(10)]
         for i in range(10):
             for j in range(10):
                 if((i+j)%2 and i < 3):
                     tabuleiro[i][j] = Peca(i,j,1)
                 elif ((i+j)%2 and i > 6):
-                    tabuleiro[i][j] = Peca(i,j,-1)
+                    tabuleiro[i][j] = Peca(i,j,-1)'''
         
-        '''Tabuleiro de testes
+        #Tabuleiro de testes
         tabuleiro = [[Peca(y,x,0) for x in range(10)] for y in range(10)]
         tabuleiro[6][3] = Peca(6,3, -1)
         tabuleiro[5][2] = Peca(5,2, 1)
-        #tabuleiro[3][2] = Peca(3,2,1)
-        tabuleiro[6][6] = Peca(6,5,1)'''
+        tabuleiro[3][2] = Peca(3,2,1)
+        tabuleiro[6][6] = Peca(6,5,1)
         return tabuleiro
 
 # Construindo o tabuleiro conforme o formato especificado :
