@@ -1,3 +1,27 @@
 B
 I7--J6
 J3--H5
+J2--I3
+J6--I5
+I3--J4
+G7--F6
+J4--H6(C come B(peça I5))
+H6--G7
+F8--H6(B come C(peça em G7))
+H6--I5
+H2--I3
+I5--J4
+I1--H2
+J8--I7
+H2--G3
+J4--H2(B come C(peça em I3))
+H2--F4(B come C(peça em G3))
+I7--H6
+H0--I1
+H8--G7
+I1--H2
+F6--E5
+H2--G3
+F4--H2(B come C(peça em H2))
+H2--I1
+J0--H2(C come B(peça I1))
