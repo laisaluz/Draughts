@@ -1,8 +1,8 @@
 # Função principal 
 
 import sys
-import offdams
-import uudamas
+import offdama
+import uudama
 
 def Damas():
     #print(sys.argv)
@@ -10,10 +10,10 @@ def Damas():
   #2 e 1, pois a função principal também conta como argumento
   
     if len(sys.argv) == 2:
-        gerenciador = offdams.GerenciadorJogo()  #ativa o modo Offline 
+        gerenciador = offdama.GerenciadorJogo()  #ativa o modo Offline 
 
     elif len(sys.argv) == 1:
-        gerenciador = uudamas.GerenciadorJogo() #ativa o modo Usuários vs Usuário
+        gerenciador = uudama.GerenciadorJogo() #ativa o modo Usuários vs Usuário
 
     else:
         print("Entrada invalida, é permitido até um arquivo")
