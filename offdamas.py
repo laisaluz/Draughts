@@ -92,40 +92,34 @@ class Peca:
         else:
             
             direcoes = [[1,1], [1,-1], [-1,1], [-1,-1]]
-            #Corrigir lógica de captura das damas (list out of indez)
             for direcao in direcoes:
-                bloqueado = False
+
                 i = self.y + direcao[0]
                 j = self.x + direcao[1]
-                while(0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro) and not bloqueado):
+                while(0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro)):
                     podeCapturar = tabuleiro[i][j].orientacao == -self.orientacao
                     i += direcao[0]
                     j += direcao[1]
 
-                    if podeCapturar and 0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro) and tabuleiro[i][j].orientacao == 0:
-                        while(0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro) and not bloqueado):
-                            softBlock = False
-                            if tabuleiro[i][j].orientacao == -self.orientacao:
+                    if podeCapturar and 0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro):
+                        while(0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro)):
+
+                            if tabuleiro[i][j].orientacao == 0:
                                 self.movimentosPossiveis += [[i,j]]
-                            elif tabuleiro[i][j].orientacao == self.orientacao:
-                                break
                             else:
-                                softBlock = True
+                                break
 
                             i += direcao[0]
                             j += direcao[1]
 
-                            if tabuleiro[i][j].orientacao != 0 and softBlock:
-                                bloqueado = True
+                            self.possuiCaptura = True
+                            possuiCapturasDisponiveis[self.orientacao] = True
 
-                        #No final da função, o atributo possuiCaptura da peça é atualizado para indicar se a peça atual possui alguma captura possível. 
-                        #Além disso, a função atualiza o dicionário possuiCapturasDisponiveis para refletir se há capturas disponíveis para o jogador atual.
+                            #No final da função, o atributo possuiCaptura da peça é atualizado para indicar se a peça atual possui alguma captura possível. 
+                            #Além disso, a função atualiza o dicionário possuiCapturasDisponiveis para refletir se há capturas disponíveis para o jogador atual.
 
-                        self.possuiCaptura = True
-                        possuiCapturasDisponiveis[self.orientacao] = True
-                    
-                    else:
-                        bloqueado = True
+                    if self.possuiCaptura:
+                        break
 
             if(not self.possuiCaptura and not possuiCapturasDisponiveis[self.orientacao]):
                 for direcao in direcoes:
@@ -292,13 +286,13 @@ class GerenciadorJogo:
         posFinal = [int(inputUsuario[5]),ord(inputUsuario[4])-65]
 
         if not self.estaDentroDoTabuleiro(posInicial) or not self.estaDentroDoTabuleiro(posFinal):
-            print("Jogada invalida na linha " + str(self.indice-1))
+            print("Jogada invalida na linha " + str(self.indice))
             return True
         
         peca: Peca = self.tabuleiro[posInicial[0]] [posInicial[1]]
 
         if peca.orientacao != self.orientacao:
-            print("Jogada invalida na linha " + str(self.indice-1))
+            print("Jogada invalida na linha " + str(self.indice))
             return True
         
         peca.movimentos_possiveis(self.tabuleiro) 
@@ -309,7 +303,7 @@ class GerenciadorJogo:
         #Reconferir os movimentos possiveis da peca, pois é possivel que seja adicionados movimentos invalidos em IniciarTurno(self, tabuleiro) 
         #pois nem todas as pecas podem ter sido verificadas antes de se adicionar os movimentos
 
-        return peca.movimentar_peca(posFinal, self.tabuleiro, self.indice-1) #retorna se deve jogar novamente ou não
+        return peca.movimentar_peca(posFinal, self.tabuleiro, self.indice) #retorna se deve jogar novamente ou não
 
 
     def iniciarJogo(self):
