@@ -1,12 +1,13 @@
 # Inicialmente, definimos que não existem capturas disponíveis para nenhum tipo de peça :
+
 possuiCapturasDisponiveis = {
                             -1: False, #-1 para pecas de cima
                             0: False, #0 para casas vazias
                             1: False, # 1 para pecas de baixo
                             } 
 
-
 # Além disso, definimos a pontuação inicial (0) de cada jogador :
+
 pontuacaoJogadores = {
     -1: 0,
     1: 0,
