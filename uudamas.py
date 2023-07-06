@@ -97,37 +97,35 @@ class Peca:
             
             direcoes = [[1,1], [1,-1], [-1,1], [-1,-1]]
             for direcao in direcoes:
-                bloqueado = False
+
                 i = self.y + direcao[0]
                 j = self.x + direcao[1]
-                while(0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro) and not bloqueado):
+                while(0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro)):
                     podeCapturar = tabuleiro[i][j].orientacao == -self.orientacao
-                    
+                    i += direcao[0]
+                    j += direcao[1]
 
-                    if podeCapturar and tabuleiro[i][j].orientacao == 0:
+                    if podeCapturar and 0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro):
                         while(0 <= i and i < len(tabuleiro) and 0 <= j and j < len(tabuleiro)):
-                            softBlock = False
-                            if tabuleiro[i][j].orientacao == -self.orientacao:
-                                self.movimentosPossiveis.append([i,j])
-                            elif tabuleiro[i][j].orientacao == self.orientacao:
-                                break
+
+                            if tabuleiro[i][j].orientacao == 0:
+                                self.movimentosPossiveis += [[i,j]]
                             else:
-                                softBlock = True
+                                break
 
                             i += direcao[0]
                             j += direcao[1]
 
-                            if tabuleiro[i][j].orientacao != 0 and softBlock:
-                                bloqueado = True
+                            self.possuiCaptura = True
+                            possuiCapturasDisponiveis[self.orientacao] = True
 
-                        #No final da função, o atributo possuiCaptura da peça é atualizado para indicar se a peça atual possui alguma captura possível. 
-                        #Além disso, a função atualiza o dicionário possuiCapturasDisponiveis para refletir se há capturas disponíveis para o jogador atual.
+                            #No final da função, o atributo possuiCaptura da peça é atualizado para indicar se a peça atual possui alguma captura possível. 
+                            #Além disso, a função atualiza o dicionário possuiCapturasDisponiveis para refletir se há capturas disponíveis para o jogador atual.
 
-                        self.possuiCaptura = True
-                        possuiCapturasDisponiveis[self.orientacao] = True
+                    if self.possuiCaptura:
+                        break
+
                     
-                    else:
-                        bloqueado = True
 
             if(not self.possuiCaptura and not possuiCapturasDisponiveis[self.orientacao]):
                 for direcao in direcoes:
@@ -236,20 +234,21 @@ class GerenciadorJogo:
 
     def iniciarTabuleiro(self):
         #Tabuleiro oficial das damas
-        '''tabuleiro = [[Peca(y,x,0) for x in range(10)] for y in range(10)]
+
+        tabuleiro = [[Peca(y,x,0) for x in range(10)] for y in range(10)]
         for i in range(10):
             for j in range(10):
                 if((i+j)%2 and i < 3):
                     tabuleiro[i][j] = Peca(i,j,1)
                 elif ((i+j)%2 and i > 6):
-                    tabuleiro[i][j] = Peca(i,j,-1)'''
+                    tabuleiro[i][j] = Peca(i,j,-1)
         
-        #Tabuleiro de testes
+        '''Tabuleiro de testes
         tabuleiro = [[Peca(y,x,0) for x in range(10)] for y in range(10)]
         tabuleiro[6][3] = Peca(6,3, -1)
         tabuleiro[5][2] = Peca(5,2, 1)
-        tabuleiro[3][2] = Peca(3,2,1)
-        tabuleiro[6][6] = Peca(6,5,1)
+        #tabuleiro[3][2] = Peca(3,2,1)
+        tabuleiro[6][5] = Peca(6,5,1)'''
         return tabuleiro
 
 # Construindo o tabuleiro conforme o formato especificado :
