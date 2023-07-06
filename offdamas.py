@@ -160,7 +160,7 @@ class Peca:
             return capturouPeca #Se capturou uma peca, deve jogar novamente
         
         else:
-            print("Jogada invalida na linha" + str(indice))
+            print("Jogada invalida na linha " + str(indice) + " no arquivo de entrada.")
             return True #Movimento inválido
 
     def virar_dama(self):
@@ -211,8 +211,6 @@ class GerenciadorJogo:
         self.escolherOrientacaoInicial()
         self.tabuleiro = self.iniciarTabuleiro()
         
-
-    
     
     def lerJogadas(self):
 
@@ -286,13 +284,13 @@ class GerenciadorJogo:
         posFinal = [int(inputUsuario[5]),ord(inputUsuario[4])-65]
 
         if not self.estaDentroDoTabuleiro(posInicial) or not self.estaDentroDoTabuleiro(posFinal):
-            print("Jogada invalida na linha " + str(self.indice))
+            print("Jogada invalida na linha " + str(self.indice) + " no arquivo de entrada.")
             return True
         
         peca: Peca = self.tabuleiro[posInicial[0]] [posInicial[1]]
 
         if peca.orientacao != self.orientacao:
-            print("Jogada invalida na linha " + str(self.indice))
+            print("Jogada invalida na linha " + str(self.indice) + " no arquivo de entrada.")
             return True
         
         peca.movimentos_possiveis(self.tabuleiro) 
@@ -356,4 +354,3 @@ class GerenciadorJogo:
         e é onde o jogo realmente acontece.'''
 
         self.iniciarJogo()
-
