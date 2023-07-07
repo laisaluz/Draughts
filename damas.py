@@ -1,3 +1,10 @@
+'''
+GRUPO :
+LAISA CAROLINE DA COSTA LUZ - 552531
+MARIA LUIZA FELIPE CAROLINO - 552655
+LUIZA ESTHER MARTINS - 555516
+'''
+
 # Função principal : responsável por executar o programa 
 
 import sys
