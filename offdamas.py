@@ -8,6 +8,7 @@ LUIZA ESTHER MARTINS PESSOA - 555516
 import sys
 
 # Inicialmente, definimos que não existem capturas disponíveis para nenhum tipo de peça :
+
 possuiCapturasDisponiveis = {
                             -1: False, #-1 para pecas de cima
                             0: False, #0 para casas vazias
@@ -15,6 +16,7 @@ possuiCapturasDisponiveis = {
                             } 
 
 # Além disso, definimos a pontuação inicial (0) de cada jogador :
+
 pontuacaoJogadores = {
     -1: 0,
     1: 0,
@@ -31,8 +33,6 @@ def sinal(x):
     else:
         return 0
     
-
-
 class Peca:
 
     ehDama = False
@@ -58,9 +58,6 @@ class Peca:
         if self.orientacao == 0:
             return
         
-        #No caso em que a peça é uma dama : 
-        #Percorre múltiplas posições na mesma direção até encontrar uma peça oponente, sem que tenha uma peça do mesmo tipo bloqueando o caminho 
-
         if not self.ehDama:
             
             direcoes = [[1,1], [1,-1], [-1,1], [-1,-1]]
@@ -90,12 +87,6 @@ class Peca:
                             self.movimentosPossiveis += [[i,j]]
 
                 
-        #No caso em que a peça não é uma dama : 
-        #Percorre os movimentos nas diagonais (cima-direita, cima-esquerda, baixo-direita, baixo-esquerda).
-        #Verifica se é possível capturar uma peça do oponente .
-        #Se for possível e a próxima posição após a peça estiver vazia, esse movimento é adicionado à lista de movimentosPossiveis.
-        #Caso não haja nenhuma captura possível, a função verifica os movimentos diagonais .
-
         else:
             
             direcoes = [[1,1], [1,-1], [-1,1], [-1,-1]]
@@ -302,17 +293,8 @@ class GerenciadorJogo:
         
         peca.movimentos_possiveis(self.tabuleiro) 
 
-
-        
-        
-        #Reconferir os movimentos possiveis da peca, pois é possivel que seja adicionados movimentos invalidos em IniciarTurno(self, tabuleiro) 
-        #pois nem todas as pecas podem ter sido verificadas antes de se adicionar os movimentos
-
         return peca.movimentar_peca(posFinal, self.tabuleiro, self.indice) #retorna se deve jogar novamente ou não
 
-    
-
-    
     def iniciarJogo(self):
         
         '''Função responsável por executar o loop principal do jogo de damas. 
@@ -338,14 +320,15 @@ class GerenciadorJogo:
                     if peca.orientacao == 1:
                         somaMovimentosBaixo += len(peca.movimentosPossiveis) > 0
 
-            #Condição de vitória das peças de baixo e das peças de cima :
 
-        
             if(not self.jogarTurno()):
                 self.orientacao = -self.orientacao
 
         self.escreverTabuleiro()  # Mostra a situação final do tabuleiro
         print("O Placar é : Peças de Cima", pontuacaoJogadores[1],"vs Peças de Baixo", pontuacaoJogadores[-1])
+
+        #Condição de vitória das peças de baixo e das peças de cima :
+      
         if pontuacaoJogadores[-1] >= 10:
             print("Jogador das peças de cima venceu!")
             sys.exit(0) # termina o programa
