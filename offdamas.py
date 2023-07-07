@@ -310,7 +310,9 @@ class GerenciadorJogo:
 
         return peca.movimentar_peca(posFinal, self.tabuleiro, self.indice) #retorna se deve jogar novamente ou não
 
+    
 
+    
     def iniciarJogo(self):
         
         '''Função responsável por executar o loop principal do jogo de damas. 
@@ -338,20 +340,18 @@ class GerenciadorJogo:
 
             #Condição de vitória das peças de baixo e das peças de cima :
 
-            if somaMovimentosBaixo == 0:
-                print("Peças de Cima ganharam!")
-                break
-            
-            if somaMovimentosCima == 0:
-                print("Peças de Baixo ganharam!")
-                break
         
             if(not self.jogarTurno()):
                 self.orientacao = -self.orientacao
 
         self.escreverTabuleiro()  # Mostra a situação final do tabuleiro
         print("O Placar é : Peças de Cima", pontuacaoJogadores[1],"vs Peças de Baixo", pontuacaoJogadores[-1])
-
+        if pontuacaoJogadores[-1] >= 10:
+            print("Jogador das peças de cima venceu!")
+            sys.exit(0) # termina o programa
+        elif pontuacaoJogadores[1] >= 10:
+            print("Jogador das peças de cima venceu!")
+            sys.exit(0)
     
 
     def gameLoop(self):
