@@ -1,3 +1,10 @@
+'''
+GRUPO :
+LAISA CAROLINE DA COSTA LUZ - 552531
+MARIA LUIZA FELIPE CAROLINO - 552655
+LUIZA ESTHER MARTINS PESSOA - 555516
+'''
+
 # Inicialmente, definimos que não existem capturas disponíveis para nenhum tipo de peça :
 
 possuiCapturasDisponiveis = {
